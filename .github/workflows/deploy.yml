@@ -57,6 +57,10 @@ jobs:
           # Install fission CLI
           sudo mv fission /usr/local/bin/fission
           
+          # Create required directories for fission
+          sudo mkdir -p /tmp/cli-docs
+          sudo chmod 777 /tmp/cli-docs
+          
           # Verify installation
           which fission
           fission version
