@@ -1,0 +1,12 @@
+apiVersion: fission.io/v1
+kind: HTTPTrigger
+metadata:
+  name: customer-http
+  namespace: default
+spec:
+  relativeurl: /customer
+  method: GET
+  functionref:
+    name: customer
+    namespace: default
+  createingress: true

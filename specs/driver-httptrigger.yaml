@@ -1,0 +1,12 @@
+apiVersion: fission.io/v1
+kind: HTTPTrigger
+metadata:
+  name: driver-http
+  namespace: default
+spec:
+  relativeurl: /driver
+  method: GET
+  functionref:
+    name: driver
+    namespace: default
+  createingress: true

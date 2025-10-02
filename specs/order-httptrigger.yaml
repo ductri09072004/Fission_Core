@@ -1,0 +1,12 @@
+apiVersion: fission.io/v1
+kind: HTTPTrigger
+metadata:
+  name: order-http
+  namespace: default
+spec:
+  relativeurl: /order
+  method: GET
+  functionref:
+    name: order
+    namespace: default
+  createingress: true
