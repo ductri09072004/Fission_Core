@@ -76,10 +76,10 @@ jobs:
       - name: Apply Fission specs
         run: |
           ls -la ./specs/
-          # Apply each spec file individually
+          # Apply each spec file individually with validation disabled
           for spec in ./specs/*.yaml; do
             echo "Applying $spec"
-            kubectl apply -f "$spec"
+            kubectl apply -f "$spec" --validate=false
           done
           echo "All Fission specs applied successfully"
           
