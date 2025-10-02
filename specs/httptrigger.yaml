@@ -1,0 +1,12 @@
+apiVersion: fission.io/v1
+kind: HTTPTrigger
+metadata:
+  name: hello-http
+  namespace: default
+spec:
+  relativeurl: /hello
+  method: GET
+  functionref:
+    name: hello
+    namespace: default
+  createingress: true

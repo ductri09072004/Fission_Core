@@ -1,0 +1,34 @@
+apiVersion: fission.io/v1
+kind: Function
+metadata:
+  name: hello
+  namespace: default
+spec:
+  environment:
+    name: python
+    namespace: default
+  code:
+    type: url
+    url: https://github.com/ductri09072004/BT_API/archive/main.zip
+    checksum: ""
+  package:
+    type: url
+    url: https://github.com/ductri09072004/BT_API/archive/main.zip
+    checksum: ""
+  secrets: []
+  configmaps: []
+  resources: {}
+  buildcommand: ""
+  invoketimeout: 60
+  idletimeout: 120
+  concurrency: 100
+  requestsPerPod: 1
+  onceOnly: false
+  retries: 3
+  retryTimeout: 0
+  keepAlive: false
+  terminationGracePeriod: 0
+  podspec: null
+  logger: null
+  functionTimeout: 0
+  onceOnly: false

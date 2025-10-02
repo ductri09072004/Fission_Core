@@ -1,0 +1,42 @@
+name: Deploy to Fission
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.30.0'
+
+      - name: Install fission-cli
+        run: |
+          curl -Lo fission https://github.com/fission/fission/releases/latest/download/fission-cli-linux
+          chmod +x fission
+          sudo mv fission /usr/local/bin/fission
+          fission version
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${KUBECONFIG_B64}" | base64 -d > $HOME/.kube/config
+        env:
+          KUBECONFIG_B64: ${{ secrets.KUBECONFIG_B64 }}
+
+      - name: Apply Fission specs
+        run: |
+          fission spec apply --specdir ./specs
+          
+      - name: Test deployment
+        run: |
+          sleep 30
+          curl -f http://fission-router.default.svc.cluster.local/hello || echo "Deployment test failed"
+
+
