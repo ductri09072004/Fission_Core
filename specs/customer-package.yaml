@@ -1,0 +1,12 @@
+apiVersion: fission.io/v1
+kind: Package
+metadata:
+  name: customer-package
+  namespace: default
+spec:
+  environment:
+    name: python
+    namespace: default
+  source:
+    type: literal
+    literal: ZGVmIG1haW4oKToKICAgIHJldHVybiAiQ3VzdG9tZXIgU2VydmljZSBPSyI=

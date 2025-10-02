@@ -7,29 +7,22 @@ spec:
   environment:
     name: python
     namespace: default
-  code:
-    type: url
-    url: https://github.com/ductri09072004/BT_API/archive/main.zip
-    checksum: ""
   package:
-    type: url
-    url: https://github.com/ductri09072004/BT_API/archive/main.zip
-    checksum: ""
+    packageref:
+      name: customer-package
+      namespace: default
   secrets: []
   configmaps: []
   resources: {}
-  buildcommand: ""
-  entrypoint: customer.py
-  invoketimeout: 60
-  idletimeout: 120
   concurrency: 100
   requestsPerPod: 1
-  onceOnly: false
-  retries: 3
-  retryTimeout: 0
-  keepAlive: false
-  terminationGracePeriod: 0
-  podspec: null
-  logger: null
-  functionTimeout: 0
-  onceOnly: false
+  functionTimeout: 60
+  idletimeout: 120
+  InvokeStrategy:
+    ExecutionStrategy:
+      ExecutorType: poolmgr
+      MinScale: 0
+      MaxScale: 0
+      TargetCPUPercent: 0
+      SpecializationTimeout: 120
+    StrategyType: execution

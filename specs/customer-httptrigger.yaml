@@ -7,6 +7,6 @@ spec:
   relativeurl: /customer
   method: GET
   functionref:
+    type: name
     name: customer
-    namespace: default
   createingress: true
