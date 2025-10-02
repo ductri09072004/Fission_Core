@@ -18,15 +18,26 @@ jobs:
 
       - name: Install fission-cli
         run: |
-          # Download fission-cli from official releases
-          curl -Lo fission https://github.com/fission/fission/releases/download/v1.19.0/fission-cli-linux
-          chmod +x fission
+          # Install Go first
+          sudo apt-get update
+          sudo apt-get install -y golang-go git
+          
+          # Set Go environment
+          export GOPATH=$HOME/go
+          export PATH=$PATH:$GOPATH/bin
+          
+          # Clone and build fission from source
+          git clone https://github.com/fission/fission.git
+          cd fission
+          
+          # Build fission CLI
+          go build -o fission ./cmd/fission
+          
+          # Install fission CLI
           sudo mv fission /usr/local/bin/fission
           
           # Verify installation
           which fission
-          ls -la /usr/local/bin/fission
-          file /usr/local/bin/fission
           fission version
 
       - name: Configure kubeconfig
