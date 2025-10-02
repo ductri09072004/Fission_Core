@@ -18,26 +18,15 @@ jobs:
 
       - name: Install fission-cli
         run: |
-          # Install Docker first
-          sudo apt-get update
-          sudo apt-get install -y docker.io
-          sudo systemctl start docker
-          sudo systemctl enable docker
-          
-          # Create fission wrapper script
-          sudo tee /usr/local/bin/fission > /dev/null << 'EOF'
-          #!/bin/bash
-          docker run --rm -it \
-            -v ~/.kube:/root/.kube \
-            -v ~/.fission:/root/.fission \
-            fission/fission:latest \
-            fission "$@"
-          EOF
-          
-          sudo chmod +x /usr/local/bin/fission
+          # Download fission-cli from official releases
+          curl -Lo fission https://github.com/fission/fission/releases/download/v1.19.0/fission-cli-linux
+          chmod +x fission
+          sudo mv fission /usr/local/bin/fission
           
           # Verify installation
           which fission
+          ls -la /usr/local/bin/fission
+          file /usr/local/bin/fission
           fission version
 
       - name: Configure kubeconfig
