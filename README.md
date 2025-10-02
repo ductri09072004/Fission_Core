@@ -125,3 +125,51 @@ fission route list
 # Test API
 curl http://localhost:8090/your-endpoint
 ```
+
+## 🐍 Deploy Python Flask API (Python_test)
+
+### 1) Chạy trực tiếp (Windows)
+```bash
+cd E:\Study\Python_test
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python app.py
+# Truy cập: http://localhost:5000/health
+```
+
+### 2) Production với Waitress
+```bash
+pip install waitress
+waitress-serve --host=0.0.0.0 --port=5000 app:app
+```
+
+### 3) Mở firewall cổng 5000 (nếu cần)
+```powershell
+New-NetFirewallRule -DisplayName "PythonTestAPI_5000" -Direction Inbound -Protocol TCP -LocalPort 5000 -Action Allow
+```
+
+### 4) Docker (tùy chọn)
+Dockerfile (đặt cạnh `app.py`):
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt && pip install waitress
+COPY . .
+ENV PYTHONUNBUFFERED=1
+EXPOSE 5000
+CMD ["waitress-serve", "--host=0.0.0.0", "--port=5000", "app:app"]
+```
+Build và chạy:
+```bash
+cd E:\Study\Python_test
+docker build -t python-test-api .
+docker run -d -p 5000:5000 --name python-test-api python-test-api
+```
+
+### 5) Kiểm tra nhanh
+```bash
+curl http://localhost:5000/health
+curl http://localhost:5000/api/hello
+```
