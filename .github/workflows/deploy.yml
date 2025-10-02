@@ -76,7 +76,12 @@ jobs:
       - name: Apply Fission specs
         run: |
           ls -la ./specs/
-          fission spec apply --specdir ./specs --wait
+          # Apply each spec file individually
+          for spec in ./specs/*.yaml; do
+            echo "Applying $spec"
+            kubectl apply -f "$spec"
+          done
+          echo "All Fission specs applied successfully"
           
       - name: Test deployment
         run: |
