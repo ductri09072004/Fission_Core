@@ -30,8 +30,29 @@ jobs:
           git clone https://github.com/fission/fission.git
           cd fission
           
-          # Build fission CLI
-          go build -o fission ./cmd/fission
+          # Explore repository structure
+          echo "=== Repository structure ==="
+          ls -la
+          echo "=== Looking for Go files ==="
+          find . -name "*.go" | head -20
+          echo "=== Looking for main.go files ==="
+          find . -name "main.go" | head -10
+          echo "=== Looking for cmd directories ==="
+          find . -type d -name "cmd" | head -10
+          echo "=== Contents of cmd directories ==="
+          find . -type d -name "cmd" -exec ls -la {} \;
+          
+          # Try to find the correct path
+          FISSION_PATH=$(find . -name "main.go" | grep -E "(cmd|cli|fission)" | head -1 | xargs dirname)
+          echo "Found potential Fission CLI path: $FISSION_PATH"
+          
+          if [ -n "$FISSION_PATH" ]; then
+            go build -o fission ./$FISSION_PATH
+          else
+            echo "Could not find Fission CLI path, trying alternative approach..."
+            # Try building from root with specific target
+            go build -o fission .
+          fi
           
           # Install fission CLI
           sudo mv fission /usr/local/bin/fission
