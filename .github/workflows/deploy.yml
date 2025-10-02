@@ -18,15 +18,23 @@ jobs:
 
       - name: Install fission-cli
         run: |
-          # Install Go first
+          # Install Docker first
           sudo apt-get update
-          sudo apt-get install -y golang-go
+          sudo apt-get install -y docker.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
           
-          # Install fission-cli via go install
-          go install github.com/fission/fission/cmd/fission@latest
+          # Create fission wrapper script
+          sudo tee /usr/local/bin/fission > /dev/null << 'EOF'
+          #!/bin/bash
+          docker run --rm -it \
+            -v ~/.kube:/root/.kube \
+            -v ~/.fission:/root/.fission \
+            fission/fission:latest \
+            fission "$@"
+          EOF
           
-          # Move to /usr/local/bin
-          sudo mv $HOME/go/bin/fission /usr/local/bin/fission
+          sudo chmod +x /usr/local/bin/fission
           
           # Verify installation
           which fission
