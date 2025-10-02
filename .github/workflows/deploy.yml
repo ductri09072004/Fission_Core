@@ -18,10 +18,13 @@ jobs:
 
       - name: Install fission-cli
         run: |
-          curl -Lo fission https://github.com/fission/fission/releases/latest/download/fission-cli-linux
+          # Download specific version instead of latest
+          curl -Lo fission https://github.com/fission/fission/releases/download/v1.19.0/fission-cli-linux
           chmod +x fission
           sudo mv fission /usr/local/bin/fission
           which fission
+          ls -la /usr/local/bin/fission
+          file /usr/local/bin/fission
           fission version
 
       - name: Configure kubeconfig
