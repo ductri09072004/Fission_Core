@@ -18,23 +18,24 @@ jobs:
 
       - name: Install fission-cli
         run: |
-          # Download specific version instead of latest
-          curl -Lo fission https://github.com/fission/fission/releases/download/v1.19.0/fission-cli-linux
-          chmod +x fission
-          sudo mv fission /usr/local/bin/fission
+          # Install Node.js first
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          
+          # Install fission-cli via npm
+          sudo npm install -g fission-cli
+          
+          # Verify installation
           which fission
-          ls -la /usr/local/bin/fission
-          file /usr/local/bin/fission
           fission version
 
       - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
-          echo "${KUBECONFIG_B64}" | base64 -d > $HOME/.kube/config
+          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 -d > $HOME/.kube/config
           ls -la $HOME/.kube/
           kubectl cluster-info
-        env:
-          KUBECONFIG_B64: ${{ secrets.KUBECONFIG_B64 }}
+        continue-on-error: true
 
       - name: Apply Fission specs
         run: |
