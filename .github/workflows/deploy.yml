@@ -18,15 +18,14 @@ jobs:
 
       - name: Install fission-cli
         run: |
-          # Install Node.js first
-          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-          sudo apt-get install -y nodejs
-          
-          # Install fission-cli via npm
-          sudo npm install -g fission-cli
+          # Download fission-cli binary directly
+          curl -Lo fission https://github.com/fission/fission/releases/download/v1.19.0/fission-cli-linux
+          chmod +x fission
+          sudo mv fission /usr/local/bin/fission
           
           # Verify installation
           which fission
+          ls -la /usr/local/bin/fission
           fission version
 
       - name: Configure kubeconfig
